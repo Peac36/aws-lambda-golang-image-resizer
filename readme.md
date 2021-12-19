@@ -9,7 +9,7 @@ A simple image resizer using [Golang](https://go.dev/) and [AWS Lambda](https://
 
 Examples:
 
-`OUTPUT_BUCKET`: `my-bucket"`
+`OUTPUT_BUCKET`: `my-bucket`
 
 `SIZES`:`[{"OutputDirectory":"/thumbnail/","SizeWidth":600,"SizeHeight":300},{"OutputDirectory":"/medium/","SizeWidth":1920,"SizeHeight":1020}]`
 
