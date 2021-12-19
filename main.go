@@ -14,11 +14,12 @@ import (
 )
 
 var s3Service *s3.S3
+var sizes []ImageSize
 
 type ImageSize struct {
-	OutputDIrectory string
+	OutputDirectory string
 	SizeWidth       int32
-	sizeHeight      int32
+	SizeHeight      int32
 }
 
 func getS3Service() *s3.S3 {
@@ -30,8 +31,8 @@ func handler(event events.SQSEvent) {
 	outputBucket := os.Getenv("OUTPUT_BUCKET")
 
 	var sizes []ImageSize = []ImageSize{
-		{OutputDIrectory: "/thumbnail/", SizeWidth: 600, sizeHeight: 300},
-		{OutputDIrectory: "/medium/", SizeWidth: 1920, sizeHeight: 1020},
+		{OutputDirectory: "/thumbnail/", SizeWidth: 600, SizeHeight: 300},
+		{OutputDirectory: "/medium/", SizeWidth: 1920, SizeHeight: 1020},
 	}
 
 	for _, record := range event.Records {
@@ -55,9 +56,9 @@ func ResizeImage(size ImageSize, file events.S3EventRecord, outputBucket string)
 
 	log.Printf("Input key %s \n", key)
 	log.Printf("Input Bucket %s \n", bucket)
-	log.Printf("Size output directory %s \n", size.OutputDIrectory)
+	log.Printf("Size output directory %s \n", size.OutputDirectory)
 	log.Printf("Size width %d \n", size.SizeWidth)
-	log.Printf("Size height %d \n", size.sizeHeight)
+	log.Printf("Size height %d \n", size.SizeHeight)
 
 	input := s3.GetObjectInput{
 		Key:    &key,
@@ -72,16 +73,16 @@ func ResizeImage(size ImageSize, file events.S3EventRecord, outputBucket string)
 
 	newFileName := file.S3.Object.ETag + outputExtension
 	localFileName := "/tmp/" + newFileName
-	removeFileName := size.OutputDIrectory + newFileName
+	removeFileName := size.OutputDirectory + newFileName
 
 	log.Printf("Local file:  %s \n", localFileName)
 	log.Printf("Remote File %s \n", removeFileName)
 
 	imageSrc, err := imaging.Decode(fileContent.Body)
 	if err != nil {
-		log.Fatalf("The image can not be decoded %s \n", err)
+		log.Printf("The image can not be decoded %s \n", err)
 	}
-	image := imaging.Fit(imageSrc, int(size.SizeWidth), int(size.sizeHeight), imaging.Gaussian)
+	image := imaging.Fit(imageSrc, int(size.SizeWidth), int(size.SizeHeight), imaging.Gaussian)
 	imaging.Save(image, localFileName)
 
 	defer os.Remove(localFileName)
