@@ -29,10 +29,14 @@ func getS3Service() *s3.S3 {
 func handler(event events.SQSEvent) {
 
 	outputBucket := os.Getenv("OUTPUT_BUCKET")
+	sizesJSON := os.Getenv("SIZES")
 
-	var sizes []ImageSize = []ImageSize{
-		{OutputDirectory: "/thumbnail/", SizeWidth: 600, SizeHeight: 300},
-		{OutputDirectory: "/medium/", SizeWidth: 1920, SizeHeight: 1020},
+	log.Printf("Outputbucket: %s", outputBucket)
+	log.Printf("Sizes JSON: %s", sizesJSON)
+
+	err := json.Unmarshal([]byte(sizesJSON), &sizes)
+	if err != nil {
+		log.Fatalf("Can not parse the size environment variable: %s \n", err)
 	}
 
 	for _, record := range event.Records {
