@@ -1,8 +1,8 @@
-##AWS Lambda Golang Image Resizer
+## AWS Lambda Golang Image Resizer
 
 A simple image resizer using [Golang](https://go.dev/) and [AWS Lambda](https://aws.amazon.com/lambda/).
 
-####Environment variable
+#### Environment variable
 
 * `OUTPUT_BUCKET` - output bucket
 * `SIZES` - a JSON that containers resized image size,width and save directory.
@@ -13,11 +13,11 @@ Examples:
 
 `SIZES`:`[{"OutputDirectory":"/thumbnail/","SizeWidth":600,"SizeHeight":300},{"OutputDirectory":"/medium/","SizeWidth":1920,"SizeHeight":1020}]`
 
-####How to build
+#### How to build
 
 Simplity execute the `build.sh` script
 
-####Setup
+#### Setup
 
 1. Create a S3
 2. Create a SQS
