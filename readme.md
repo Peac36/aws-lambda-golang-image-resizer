@@ -1,5 +1,7 @@
 ## AWS Lambda Golang Image Resizer
 
+![preview](/preview.png)
+
 A simple image resizer using [Golang](https://go.dev/) and [AWS Lambda](https://aws.amazon.com/lambda/).
 
 #### Environment variable
